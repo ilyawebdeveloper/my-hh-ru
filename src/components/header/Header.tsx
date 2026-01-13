@@ -1,7 +1,10 @@
 import { Flex, Text } from "@mantine/core";
 import UserIcon from "../../assets/userIcon";
+import { useNavigate } from "react-router";
 
 export const Header = () => {
+  const navigate = useNavigate();
+
   return (
     <Flex
       align="center"
@@ -38,7 +41,13 @@ export const Header = () => {
 
         <Flex align="center" justify="center" gap="5px">
           <UserIcon />
-          <Text size="md" color="gray">
+          <Text
+            size="md"
+            color="gray"
+            onClick={() => {
+              navigate("/about", { replace: true });
+            }}
+          >
             Обо мне
           </Text>
         </Flex>

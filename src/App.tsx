@@ -10,6 +10,10 @@ import type { Vacancy } from "./components/vakansies/Vacancy";
 import useDebounce from "./helpers/debounse";
 import SelectCities from "./components/selectCities/SelectCities";
 import type { Area } from "./types/area";
+import { useDispatch, useSelector } from "react-redux";
+import { changeVacancies, fetchVacancies } from "./features/vacancies/vacancies";
+import type { UnknownAction } from "@reduxjs/toolkit";
+import type { RootState } from "./store";
 
 interface Data {
   alternate_url: string;
@@ -25,12 +29,17 @@ interface Data {
 }
 
 function App() {
+  const { vacanciesList } = useSelector((state: RootState) => state.vacancies);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchVacancies() as unknown as UnknownAction);
+  }, []);
+
   const tags = ["JavaScript", "React", "Redux", "ReduxToolkit", "Nextjs"];
   const [cities, setCities] = useState<string[] | null>(null);
   const [searchText, setSearchText] = useState("Фронтенд");
   const [tagsItems, setTegsitems] = useState(tags);
   const [page, onChange] = useState(1);
-  const [data, setData] = useState<Data | null>(null);
   const [dataCities, setDataCities] = useState<Area[] | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -77,7 +86,7 @@ function App() {
       )
         .then((response) => response.json())
         .then((data: Data) => {
-          setData(data);
+          dispatch(changeVacancies(data));
           setLoading(false);
         })
         .catch((error) => {
@@ -100,15 +109,7 @@ function App() {
         console.error("Ошибка при загрузке:", error);
         setLoading(false);
       });
-  }, [
-    page,
-    tagsItems,
-    debouncedSearchTerm,
-    searchText,
-    tagsItemParams,
-    cities,
-    selectedCities,
-  ]);
+  }, [page, tagsItems, debouncedSearchTerm, searchText, tagsItemParams, cities, selectedCities, dispatch]);
 
   if (loading) {
     return <>...</>;
@@ -125,7 +126,7 @@ function App() {
         </Flex>
 
         <Flex direction="column" align="center" gap="24px" pb="30px">
-          <Vakansies vakansies={data?.items} />
+          <Vakansies vakansies={vacanciesList.items} />
           <Pagination
             total={10}
             siblings={1}

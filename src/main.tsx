@@ -1,8 +1,10 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import App from "./App.tsx";
 import { createTheme, MantineProvider } from "@mantine/core";
+import { RouterProvider } from "react-router";
+import { router } from "./routes.ts";
+import { Provider } from "react-redux";
+import { store } from "./store.ts";
 
 const theme = createTheme({
   colors: {
@@ -21,10 +23,12 @@ const theme = createTheme({
   },
 });
 
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <MantineProvider theme={theme}>
-      <App />
-    </MantineProvider>
-  </StrictMode>
+const root = document.getElementById("root")!;
+
+createRoot(root).render(
+  <MantineProvider theme={theme}>
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
+  </MantineProvider>
 );
