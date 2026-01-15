@@ -1,4 +1,3 @@
-import React from "react";
 import Header from "../components/header/Header";
 import { Button, Flex, Text } from "@mantine/core";
 import imgCat from "../assets/sad-cat 1.png";

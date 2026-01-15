@@ -11,7 +11,11 @@ import useDebounce from "./helpers/debounse";
 import SelectCities from "./components/selectCities/SelectCities";
 import type { Area } from "./types/area";
 import { useDispatch, useSelector } from "react-redux";
-import { changeVacancies, fetchVacancies } from "./features/vacancies/vacancies";
+import {
+  changeVacancies,
+  fetchVacancies,
+  changeSearchText,
+} from "./features/vacancies/vacancies";
 import type { UnknownAction } from "@reduxjs/toolkit";
 import type { RootState } from "./store";
 
@@ -29,7 +33,9 @@ interface Data {
 }
 
 function App() {
-  const { vacanciesList } = useSelector((state: RootState) => state.vacancies);
+  const { vacanciesList, searchText: searchTextState } = useSelector(
+    (state: RootState) => state.vacancies
+  );
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchVacancies() as unknown as UnknownAction);
@@ -37,7 +43,7 @@ function App() {
 
   const tags = ["JavaScript", "React", "Redux", "ReduxToolkit", "Nextjs"];
   const [cities, setCities] = useState<string[] | null>(null);
-  const [searchText, setSearchText] = useState("Фронтенд");
+  const [searchText, setSearchText] = useState(searchTextState);
   const [tagsItems, setTegsitems] = useState(tags);
   const [page, onChange] = useState(1);
   const [dataCities, setDataCities] = useState<Area[] | null>(null);
@@ -109,7 +115,20 @@ function App() {
         console.error("Ошибка при загрузке:", error);
         setLoading(false);
       });
-  }, [page, tagsItems, debouncedSearchTerm, searchText, tagsItemParams, cities, selectedCities, dispatch]);
+  }, [
+    page,
+    tagsItems,
+    debouncedSearchTerm,
+    searchText,
+    tagsItemParams,
+    cities,
+    selectedCities,
+    dispatch,
+  ]);
+
+  useEffect(() => {
+    dispatch(changeSearchText(searchText));
+  }, [searchText]);
 
   if (loading) {
     return <>...</>;

@@ -17,6 +17,7 @@ interface Data {
 export interface CounterState {
   value: number;
   vacanciesList: Data;
+  searchText: string;
   status: "idle" | "pending" | "succeeded" | "failed" | "loading";
   error: unknown;
   cart: [];
@@ -42,6 +43,7 @@ export const fetchVacancies = createAsyncThunk(
 const initialState: CounterState = {
   value: 0,
   vacanciesList: [],
+  searchText: "Фронтенд",
   status: "idle",
   error: null,
   cart: [],
@@ -52,6 +54,9 @@ export const vacansiesSlice = createSlice({
   name: "vacancies",
   initialState,
   reducers: {
+    changeSearchText: (state, searchText) => {
+      state.searchText = searchText.payload;
+    },
     changeVacancies: (state, newData) => {
       state.vacanciesList = newData.payload;
     },
@@ -74,6 +79,6 @@ export const vacansiesSlice = createSlice({
   },
 });
 
-export const { changeVacancies } = vacansiesSlice.actions;
+export const { changeVacancies, changeSearchText } = vacansiesSlice.actions;
 
 export default vacansiesSlice.reducer;
