@@ -11,7 +11,7 @@ interface Props {
 }
 
 const VakancyCard: FC<Props> = ({ vacancy, linkToHh }) => {
-  const { searchText: searchTextState } = useSelector(
+  const { searchText: searchTextState, tags } = useSelector(
     (state: RootState) => state.vacancies
   );
   const navigate = useNavigate();
@@ -49,7 +49,7 @@ const VakancyCard: FC<Props> = ({ vacancy, linkToHh }) => {
       key={vacancy.id}
       onClick={() => {
         linkToHh === undefined &&
-          navigate(`${vacancy.id}?search=${searchTextState}`, {
+          navigate(`${vacancy.id}?search=${searchTextState}?tags=${tags}`, {
             replace: true,
           });
       }}

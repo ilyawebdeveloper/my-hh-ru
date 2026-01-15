@@ -15,9 +15,12 @@ import {
   changeVacancies,
   fetchVacancies,
   changeSearchText,
+  changeTags,
+  changeSelectedCities,
 } from "./features/vacancies/vacancies";
 import type { UnknownAction } from "@reduxjs/toolkit";
 import type { RootState } from "./store";
+import { useNavigate, useParams } from "react-router";
 
 interface Data {
   alternate_url: string;
@@ -33,20 +36,29 @@ interface Data {
 }
 
 function App() {
-  const { vacanciesList, searchText: searchTextState } = useSelector(
-    (state: RootState) => state.vacancies
-  );
+  const {
+    vacanciesList,
+    searchText: searchTextState,
+    tags: tagsState,
+    selectedCities: selectedCitiesState,
+  } = useSelector((state: RootState) => state.vacancies);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   useEffect(() => {
     dispatch(fetchVacancies() as unknown as UnknownAction);
   }, []);
 
-  const tags = ["JavaScript", "React", "Redux", "ReduxToolkit", "Nextjs"];
+  const params = useParams();
+
+  console.log(params, "params");
+
   const [cities, setCities] = useState<string[] | null>(null);
   const [searchText, setSearchText] = useState(searchTextState);
-  const [tagsItems, setTegsitems] = useState(tags);
+  const [tagsItems, setTegsitems] = useState(tagsState);
   const [page, onChange] = useState(1);
-  const [dataCities, setDataCities] = useState<Area[] | null>(null);
+  const [dataCities, setDataCities] = useState<Area[] | null>(
+    selectedCitiesState
+  );
   const [loading, setLoading] = useState(true);
 
   const debouncedSearchTerm = useDebounce(searchText, 1500);
@@ -129,6 +141,36 @@ function App() {
   useEffect(() => {
     dispatch(changeSearchText(searchText));
   }, [searchText]);
+  useEffect(() => {
+    dispatch(changeTags(tagsItems));
+  }, [tagsItems]);
+  useEffect(() => {
+    if (dataCities !== null) {
+      dispatch(changeSelectedCities(dataCities[0]));
+    }
+    return;
+  }, [dataCities]);
+
+  useEffect(() => {
+    const truthe =
+      selectedCitiesState !== null &&
+      selectedCitiesState !== undefined &&
+      params.city !== selectedCitiesState.name;
+    const navigateVacansies = async () => {
+      return await navigate(
+        `${truthe ? selectedCitiesState.name : "/vacansies"}`,
+        {
+          relative: "path",
+        }
+      );
+    };
+
+    if (truthe) {
+      navigateVacansies();
+    }
+
+    return;
+  }, [selectedCitiesState, params]);
 
   if (loading) {
     return <>...</>;
