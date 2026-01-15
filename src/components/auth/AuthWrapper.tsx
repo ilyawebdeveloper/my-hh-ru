@@ -5,16 +5,23 @@ import type { RootState } from "../../store";
 
 const AuthWrapper = () => {
   const navigate = useNavigate();
-  const { searchText: searchTextState } = useSelector(
-    (state: RootState) => state.vacancies
+  const { searchText: searchTextState, tags } = useSelector(
+    (state: RootState) => state.vacancies,
   );
 
   useEffect(() => {
-    const truthe = 0; // Проверка на авторизацию
+    const truthe = 0;
     const navigateVacansies = async () => {
-      return await navigate(`/vacansies?search=${searchTextState}`, {
-        replace: true,
-      });
+      return await navigate(
+        `/vacansies?search=${searchTextState}?tags=${tags}`,
+        {
+          replace: true,
+          state: {
+            searchText: searchTextState,
+            tags: tags,
+          },
+        },
+      );
     };
 
     if (truthe === 0) {

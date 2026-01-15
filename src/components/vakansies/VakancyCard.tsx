@@ -1,7 +1,7 @@
 import { type FC } from "react";
 import type { DictionaryItem, Vacancy } from "./Vacancy";
 import { Button, Flex, Text } from "@mantine/core";
-import { redirect, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import type { RootState } from "../../store";
 import { useSelector } from "react-redux";
 
@@ -11,8 +11,8 @@ interface Props {
 }
 
 const VakancyCard: FC<Props> = ({ vacancy, linkToHh }) => {
-  const { searchText: searchTextState } = useSelector(
-    (state: RootState) => state.vacancies
+  const { searchText: searchTextState, tags } = useSelector(
+    (state: RootState) => state.vacancies,
   );
   const navigate = useNavigate();
   const formatWork = (format: DictionaryItem[]) => {
@@ -39,6 +39,16 @@ const VakancyCard: FC<Props> = ({ vacancy, linkToHh }) => {
     return "Гибрид";
   };
 
+  const navToVacasncy = () => {
+    if (linkToHh === undefined) {
+      navigate({
+        pathname: `/vacansies/vacancy/${vacancy.id}`,
+        search: `?search=${searchTextState}?tags=${tags}`,
+      });
+    }
+    return;
+  };
+
   return (
     <Flex
       direction="column"
@@ -47,12 +57,7 @@ const VakancyCard: FC<Props> = ({ vacancy, linkToHh }) => {
       w="659px"
       bdrs="md"
       key={vacancy.id}
-      onClick={() => {
-        linkToHh === undefined &&
-          navigate(`${vacancy.id}?search=${searchTextState}`, {
-            replace: true,
-          });
-      }}
+      onClick={navToVacasncy}
     >
       <Text fw={600} size="20px" color="#364FC7">
         {vacancy.name}

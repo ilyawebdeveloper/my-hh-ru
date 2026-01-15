@@ -1,6 +1,6 @@
 import { Flex, MultiSelect } from "@mantine/core";
 import LocationIcon from "../../assets/locationIcon";
-import type { FC } from "react";
+import { type FC } from "react";
 
 interface Props {
   selectCities: (value: string[]) => void;

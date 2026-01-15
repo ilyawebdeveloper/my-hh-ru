@@ -8,7 +8,7 @@ interface Props {
 }
 
 export const SectionTeg: FC<Props> = ({ tags, deleteTag, addTag }) => {
-  const [inputValue, setInputValue] = useState<string | null>(null);
+  const [inputValue, setInputValue] = useState<string>('');
 
   return (
     <Flex
@@ -31,14 +31,15 @@ export const SectionTeg: FC<Props> = ({ tags, deleteTag, addTag }) => {
           onChange={(e) => {
             setInputValue(e.target.value);
           }}
+          value={inputValue}
         />
         <Button
           variant="filled"
           size="sm"
           disabled={tags.length === 5}
           onClick={() => {
-            addTag(inputValue as string);
-            setInputValue(null);
+            addTag(inputValue);
+            setInputValue('');
           }}
         >
           <Text fw={500} size="sm">

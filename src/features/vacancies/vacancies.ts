@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { Vacancy } from "../../components/vakansies/Vacancy";
+import type { Area } from "../../types/area";
 
 interface Data {
   alternate_url: string;
@@ -17,6 +18,8 @@ interface Data {
 export interface CounterState {
   value: number;
   vacanciesList: Data;
+  tags: string[];
+  selectedCities: Area[] | null;
   searchText: string;
   status: "idle" | "pending" | "succeeded" | "failed" | "loading";
   error: unknown;
@@ -40,9 +43,13 @@ export const fetchVacancies = createAsyncThunk(
   }
 );
 
+const tags = ["JavaScript", "React", "Redux", "ReduxToolkit", "Nextjs"];
+
 const initialState: CounterState = {
   value: 0,
   vacanciesList: [],
+  selectedCities: null,
+  tags: tags,
   searchText: "Фронтенд",
   status: "idle",
   error: null,
@@ -54,6 +61,12 @@ export const vacansiesSlice = createSlice({
   name: "vacancies",
   initialState,
   reducers: {
+    changeSelectedCities: (state, newCity) => {
+      state.selectedCities = newCity.payload;
+    },
+    changeTags: (state, newTags) => {
+      state.tags = newTags.payload;
+    },
     changeSearchText: (state, searchText) => {
       state.searchText = searchText.payload;
     },
@@ -79,6 +92,11 @@ export const vacansiesSlice = createSlice({
   },
 });
 
-export const { changeVacancies, changeSearchText } = vacansiesSlice.actions;
+export const {
+  changeVacancies,
+  changeSearchText,
+  changeTags,
+  changeSelectedCities,
+} = vacansiesSlice.actions;
 
 export default vacansiesSlice.reducer;

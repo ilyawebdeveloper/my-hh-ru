@@ -4,7 +4,8 @@ import { createTheme, MantineProvider } from "@mantine/core";
 import { RouterProvider } from "react-router";
 import { router } from "./routes.ts";
 import { Provider } from "react-redux";
-import { store } from "./store.ts";
+import { persistor, store } from "./store.ts";
+import { PersistGate } from "redux-persist/integration/react";
 
 const theme = createTheme({
   colors: {
@@ -28,7 +29,9 @@ const root = document.getElementById("root")!;
 createRoot(root).render(
   <MantineProvider theme={theme}>
     <Provider store={store}>
-      <RouterProvider router={router} />
+      <PersistGate loading={null} persistor={persistor}>
+        <RouterProvider router={router} />
+      </PersistGate>
     </Provider>
-  </MantineProvider>
+  </MantineProvider>,
 );

@@ -27,7 +27,14 @@ export const Header = () => {
         </Text>
       </Flex>
       <Flex align="center" justify="center" gap="24px" pr="50px">
-        <Flex align="center" justify="center" gap="8px">
+        <Flex
+          align="center"
+          justify="center"
+          gap="8px"
+          onClick={() => {
+            navigate("/");
+          }}
+        >
           <Text fw={500}>Вакансии FE</Text>
           <div
             style={{
@@ -38,7 +45,6 @@ export const Header = () => {
             }}
           />
         </Flex>
-
         <Flex align="center" justify="center" gap="5px">
           <UserIcon />
           <Text

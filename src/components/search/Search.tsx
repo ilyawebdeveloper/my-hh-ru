@@ -1,12 +1,13 @@
 import { Button, Flex, Text, TextInput } from "@mantine/core";
 import SearchIcon from "../../assets/searchIcon";
-import type { FC } from "react";
+import { useState, type FC } from "react";
 interface Props {
   onSearch: (value: string) => void;
 }
 
 export const Search: FC<Props> = ({ onSearch }) => {
   const icon = <SearchIcon />;
+  const [valueSearch, setValueSearch] = useState("");
 
   return (
     <Flex
@@ -33,10 +34,18 @@ export const Search: FC<Props> = ({ onSearch }) => {
           leftSectionPointerEvents="none"
           leftSection={icon}
           onChange={(e) => {
-            onSearch(e.target.value);
+            setValueSearch(e.target.value);
           }}
+          value={valueSearch}
         />
-        <Button variant="filled" size="lg">
+        <Button
+          variant="filled"
+          size="lg"
+          onClick={() => {
+            onSearch(valueSearch);
+            setValueSearch("");
+          }}
+        >
           Найти
         </Button>
       </Flex>

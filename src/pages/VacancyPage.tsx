@@ -67,8 +67,6 @@ const VacancyPage = () => {
   const params = useParams();
   const { vacanciesList } = useSelector((state: RootState) => state.vacancies);
 
-  console.log(vacanciesList, "vacanciesList");
-
   const activeVaacancies = useMemo(() => {
     return vacanciesList.items?.find((vacancy) => vacancy.id === params.id);
   }, [params.id, vacanciesList.items]);
@@ -115,12 +113,12 @@ const VacancyPage = () => {
           <Text size="20px" fw={600}>
             Компания
           </Text>
-          <Text mt='sm'>{stripHtml(data?.description ?? "")}</Text>
+          <Text mt="sm">{stripHtml(data?.description ?? "")}</Text>
 
           <Text size="20px" fw={600} mt="lg">
             О проекте
           </Text>
-          <Text mt='sm'>
+          <Text mt="sm">
             {activeVaacancies.snippet.responsibility}
             {activeVaacancies.snippet.requirement}
           </Text>
